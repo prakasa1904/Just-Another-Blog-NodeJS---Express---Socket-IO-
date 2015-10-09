@@ -10,17 +10,35 @@ var users = require('./routes/users');
 
 var app = express();
 
+/* database integration */
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    host      : 'localhost',
+    user      : 'root',
+    password  : 'tubokarto1904',
+    database  : 'nodejs',
+    port      : 3306,
+});
+//app.set("connection", connection);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+/* database Access To All Routers */
+app.use(function(req,res,next){
+    req.connection = connection;
+    next();
+});
 
 app.use('/', routes);
 app.use('/users', users);
