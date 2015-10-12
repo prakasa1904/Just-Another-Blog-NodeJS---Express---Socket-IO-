@@ -19,7 +19,6 @@ var connection = mysql.createConnection({
     database  : 'nodejs',
     port      : 3306,
 });
-//app.set("connection", connection);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
