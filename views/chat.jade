@@ -1,0 +1,62 @@
+extends layout
+
+block content
+	nav(class="navbar navbar-inverse navbar-fixed-top" role="navigation")
+		div(class="container")
+			div(class="navbar-header")
+				button(type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1")
+					span(class="sr-only") Toggle navigation
+					span(class="icon-bar")
+					span(class="icon-bar")
+					span(class="icon-bar")
+				a(class="navbar-brand" href="#")
+					img(src="http://placehold.it/150x50&text=Logo" alt="")
+
+			div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+				ul(class="nav navbar-nav")
+					li()
+						a(href="/") Home
+					li()
+						a(href="/about") About
+					li()
+						a(href="/service") Service
+					li()
+						a(href="/contact") Contact
+	
+	div(class="container")
+
+		div(class="row")
+			div(class="col-md-8")
+				img(class="img-responsive img-rounded" src="http://placehold.it/900x350" alt="")
+			div(class="col-md-4")
+				h1= title
+				p #{desc}
+				a(class="btn btn-primary btn-lg" href="#") Call to Action!
+
+		hr()
+
+		div(class="row")
+			div(class="col-lg-12")
+				div(id="content" class="well text-center")
+					This is a well that is a great spot for a business tagline or phone number for easy access!
+
+		div(class="row")
+			div(class="col-md-12")
+				form(action="" method="post")
+					div(class="form-group")
+						label(for="exampleInputUsername1") Nama Lengkap
+						input(type="text" value="#{user}" name="name" placeholder="Username" id="member" class="form-control")
+
+					div(class="form-group")
+						label(for="exampleInputPass1") Alamat
+						textarea(name="address" placeholder="Alamat Lengkap" id="field" class="form-control")
+
+					button(id="send" class="btn btn-default" type="submit") Kirim
+
+		footer()
+			div(class="row")
+				div(class="col-lg-12")
+					p() Copyright &copy; Your Website 2014
+
+		script(src='/javascripts/chat.js')
+		script(src='/socket.io/socket.io.js')

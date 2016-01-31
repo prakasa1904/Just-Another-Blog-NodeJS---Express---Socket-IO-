@@ -1,17 +1,32 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var express         = require('express');
+var session         = require('express-session')
+var path            = require('path');
+var favicon         = require('serve-favicon');
+var logger          = require('morgan');
+var cookieParser    = require('cookie-parser');
+var bodyParser      = require('body-parser');
+var mysql           = require('mysql');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+/* Routes Controller */
+var routes          = require('./routes/index');
+var users           = require('./routes/users');
 
 var app = express();
 
+// Set App Listen In Port What U Want
+//app.listen(7000); => Its change to integrate socket.id
+var io = require('socket.io').listen(app.listen(7000));
+console.log(cookieParser);
+/* Socket IO Start Over Here */
+io.sockets.on('connection', function (socket) {
+    socket.emit('message', { member: 'Welcome', message: 'welcome to the chat' });
+    //socket.emit('message');
+    socket.on('send', function (data) {
+        io.sockets.emit('message', data);
+    });
+});
+
 /* database integration */
-var mysql = require('mysql');
 var connection = mysql.createConnection({
     host      : 'localhost',
     user      : 'root',
@@ -19,6 +34,30 @@ var connection = mysql.createConnection({
     database  : 'nodejs',
     port      : 3306,
 });
+
+/* database Access To All Routers */
+app.use(function(req,res,next){
+    req.connection = connection;
+    next();
+});
+
+
+/* START ::: Session Management */
+var sessionConfig = {
+  name: 'prakasa1904',
+  secret: 'prakasa1904',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    path: '/', 
+    httpOnly: true,
+    secure: false,
+    expires: new Date(Date.now() + 3600000),
+    maxAge: 3600000,
+  }
+}
+app.use(session(sessionConfig));
+/* END OF ::: Session Management */
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,13 +71,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-/* database Access To All Routers */
-app.use(function(req,res,next){
-    req.connection = connection;
-    next();
-});
-
+/* Routing */
 app.use('/', routes);
 app.use('/users', users);
 
