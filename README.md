@@ -8,3 +8,5 @@
 <ul>
 <li>DEBUG=nodejs npm start</li>
 </ul>
+
+<br />Module MySQL : https://github.com/felixge/node-mysql
