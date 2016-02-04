@@ -15,13 +15,26 @@ router.get('/', function(req, res, next) {
 
 router.get('/login/:id', function(req, res, next) {
 	db = req.connection; var id = req.params.id;
-	data = {
-		id: id,
-	}
+	console.log(req.params.id);
+	res.send(id);
+	
+	db.query({
+	  sql: 'SELECT * FROM `member` WHERE `id` = ?',
+	  timeout: 40000, // 40s
+	  values: [req.params.id]
+	}, function (err, results, fields) {
+		if (!err){
+			req.session.name = results[0]['name'];
+			req.session.address = results[0]['address'];
+			console.log(results);
+		}else console.log(err);
+	});
 
-	db.query('SELECT * FROM member WHERE', data, function (err, result) {
+	console.log("Cookies :  ", req.cookies);
+
+	/*db.query('SELECT * FROM member WHERE', data, function (err, result) {
 		if (!err)
-			rows
+			result
 		else
 			console.log(err);
 	});
@@ -34,7 +47,7 @@ router.get('/login/:id', function(req, res, next) {
 	} else {
 		req.session.email = 'raka_1904@yahoo.co.id'
 		res.end('welcome to the session demo. refresh!')
-	}
+	}*/
  });
 
 router.get('/chat', function(req, res, next) {
@@ -59,17 +72,5 @@ router.post('/', function (req, res) {
 			console.log(err);
 	});
 });
-
-/*router.get('/about', function(req, res, next) {
-  res.render('index', { title: 'My About Node', desc: 'This is a template that is great for small businesses. It doesn\'t have too much fancy flare to it, but it makes a great use of the standard Bootstrap core components. Feel free to use this template for any project you want!' } );
-});
-
-router.get('/service', function(req, res, next) {
-  res.render('index', { title: 'My Service Node', desc: 'This is a template that is great for small businesses. It doesn\'t have too much fancy flare to it, but it makes a great use of the standard Bootstrap core components. Feel free to use this template for any project you want!' } );
-});
-
-router.get('/contact', function(req, res, next) {
-  res.render('index', { title: 'My Contact Node', desc: 'This is a template that is great for small businesses. It doesn\'t have too much fancy flare to it, but it makes a great use of the standard Bootstrap core components. Feel free to use this template for any project you want!' } );
-});*/
 
 module.exports = router;

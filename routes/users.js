@@ -7,4 +7,10 @@ router.get('/:name', function(req, res) {
 	res.send(name);
  });
 
+router.get('/chat', function(req, res) {
+	var name = req.params.name;
+	//res.render('modules/' + name);
+	res.send(name);
+ });
+
 module.exports = router;
